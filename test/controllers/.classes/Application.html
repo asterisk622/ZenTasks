@@ -1,0 +1,179 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Application</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">controllers</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Application (controllers)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Application</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 14)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Application$Login</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 4)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 18)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package controllers;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import play.*;
+<i>4</i>&nbsp;import play.mvc.*;
+<i>5</i>&nbsp;import play.data.*;
+<i>6</i>&nbsp;import static play.data.Form.*;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;import models.*;
+<i>9</i>&nbsp;import views.html.*;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;
+<b class="nc"><i>12</i>&nbsp;public class Application extends Controller {</b>
+<i>13</i>&nbsp;    @Security.Authenticated(Secured.class)
+<i>14</i>&nbsp;    public static Result index() {
+<b class="nc"><i>15</i>&nbsp;        return ok(index.render(</b>
+<i>16</i>&nbsp;                Project.findInvolving(request().username()),
+<i>17</i>&nbsp;                Task.findTodoInvolving(request().username()),
+<i>18</i>&nbsp;                User.find.byId(request().username())
+<i>19</i>&nbsp;        ));
+<i>20</i>&nbsp;    }
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;    public static Result login() {
+<b class="nc"><i>23</i>&nbsp;        return ok(</b>
+<i>24</i>&nbsp;                login.render(form(Login.class))
+<i>25</i>&nbsp;        );
+<i>26</i>&nbsp;    }
+<i>27</i>&nbsp;    public static Result logout() {
+<b class="nc"><i>28</i>&nbsp;        session().clear();</b>
+<b class="nc"><i>29</i>&nbsp;        flash(&quot;success&quot;, &quot;You&#39;ve been logged out&quot;);</b>
+<b class="nc"><i>30</i>&nbsp;        return redirect(</b>
+<i>31</i>&nbsp;                routes.Application.login()
+<i>32</i>&nbsp;        );
+<i>33</i>&nbsp;    }
+<i>34</i>&nbsp;    public static Result javascriptRoutes() {
+<b class="nc"><i>35</i>&nbsp;        response().setContentType(&quot;text/javascript&quot;);</b>
+<b class="nc"><i>36</i>&nbsp;        return ok(</b>
+<i>37</i>&nbsp;                Routes.javascriptRouter(&quot;jsRoutes&quot;,
+<i>38</i>&nbsp;                        controllers.routes.javascript.Projects.add(),
+<i>39</i>&nbsp;                        controllers.routes.javascript.Projects.delete(),
+<i>40</i>&nbsp;                        controllers.routes.javascript.Projects.rename(),
+<i>41</i>&nbsp;                        controllers.routes.javascript.Projects.addGroup()
+<i>42</i>&nbsp;                )
+<i>43</i>&nbsp;        );
+<i>44</i>&nbsp;    }
+<i>45</i>&nbsp;    public static Result authenticate() {
+<b class="nc"><i>46</i>&nbsp;        Form&lt;Login&gt; loginForm = form(Login.class).bindFromRequest();</b>
+<b class="nc"><i>47</i>&nbsp;        if (loginForm.hasErrors()) {</b>
+<b class="nc"><i>48</i>&nbsp;            return badRequest(login.render(loginForm));</b>
+<i>49</i>&nbsp;        } else {
+<b class="nc"><i>50</i>&nbsp;            session().clear();</b>
+<b class="nc"><i>51</i>&nbsp;            session(&quot;email&quot;, loginForm.get().email);</b>
+<b class="nc"><i>52</i>&nbsp;            return redirect(</b>
+<i>53</i>&nbsp;                    routes.Application.index()
+<i>54</i>&nbsp;            );
+<i>55</i>&nbsp;        }
+<i>56</i>&nbsp;    }
+<i>57</i>&nbsp;
+<b class="nc"><i>58</i>&nbsp;    public static class Login {</b>
+<i>59</i>&nbsp;
+<i>60</i>&nbsp;        public String email;
+<i>61</i>&nbsp;        public String password;
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;        public String validate() {
+<b class="nc"><i>64</i>&nbsp;            if (User.authenticate(email, password) == null) {</b>
+<b class="nc"><i>65</i>&nbsp;                return &quot;Invalid user or password&quot;;</b>
+<i>66</i>&nbsp;            }
+<b class="nc"><i>67</i>&nbsp;            return null;</b>
+<i>68</i>&nbsp;        }
+<i>69</i>&nbsp;    }
+<i>70</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2013-09-09 17:04</div>
+</div>
+</body>
+</html>

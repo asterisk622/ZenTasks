@@ -42,7 +42,7 @@ public class LoginTest extends WithApplication {
     @Test
     public void authenticated() {
         Result result = callAction(
-                controllers.routes.ref.Application.index(),
+                controllers.routes.ref.Projects.index(),
                 fakeRequest().withSession("email", "bob@example.com")
         );
         assertEquals(200, status(result));
@@ -50,7 +50,7 @@ public class LoginTest extends WithApplication {
     @Test
     public void notAuthenticated() {
         Result result = callAction(
-                controllers.routes.ref.Application.index(),
+                controllers.routes.ref.Projects.index(),
                 fakeRequest()
         );
         assertEquals(303, status(result));
