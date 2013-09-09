@@ -20,7 +20,9 @@ import static play.test.Helpers.*;
 public class ModelsTest extends WithApplication {
     @Before
     public void setUp() {
-        start(fakeApplication(inMemoryDatabase()));
+        //start(fakeApplication(inMemoryDatabase()));
+        start(fakeApplication(inMemoryDatabase(), fakeGlobal()));
+        //Ebean.save((List) Yaml.load("test-data.yml"));
     }
 
     @Test
